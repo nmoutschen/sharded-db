@@ -1,44 +1,78 @@
 package sharded
 
-//GetNode returns the first data node index for a specific identifier.
-func GetNode(identifier, numNodes int) int {
-	return identifier % numNodes
+import (
+	"errors"
+)
+
+/*NodeIterator represents a structure that can be used to iterate over a list
+of nodes for a specific identifier without needing to pre-calculate all nodes.
+
+This is useful to iterate over failed nodes in order, as node nodes are only
+computed when necessary.
+*/
+type NodeIterator struct {
+	Identifier int
+	Position int
+
+	current int
+	numNodes int
+	sortedNodes []int
+	nodes []int
 }
 
-/*GetNodes returns the complete list of all available data node indexes for
-a specific identifier.
-*/
-func GetNodes(identifier, numNodes, numReplicas int) []int {
-	var nodes, sNodes []int
-	value := identifier
-	for modulo := numNodes; modulo > numNodes-numReplicas; modulo-- {
-		node := value % modulo
-		sNodes, node = SortedInsert(sNodes, node)
+//NewNodeIterator creates a new node iterator
+func NewNodeIterator(identifier, numNodes int) *NodeIterator {
+	return &NodeIterator{
+		Identifier: identifier,
+		
+		current: identifier,
+		numNodes: numNodes,
+	}
+}
 
-		nodes = append(nodes, node)
-		value /= modulo
+/*Get returns a node at a specific position in the list of nodes for the
+identifier.
+*/
+func (ni *NodeIterator) Get(pos int) (int, error) {
+	if pos >= ni.numNodes {
+		return 0, errors.New("Number of nodes exceeded")
 	}
 
-	return nodes
-}
-
-//GetNodeN returns the Nth data node index for a specific identifier.
-func GetNodeN(identifier, numNodes, pos int) int {
-	var node int
-	var sNodes []int
-	value := identifier
-	for modulo := numNodes; modulo >= numNodes-pos; modulo-- {
-		node = value % modulo
-		sNodes, node = SortedInsert(sNodes, node)
-		value /= modulo
+	//The value has not been precalculated
+	if pos >= len(ni.nodes) {
+		for i := ni.Position; i <= pos; i++ {
+			ni.Next()
+		}
 	}
-	return node
+
+	return ni.nodes[pos], nil
 }
 
-/*SortedInsert insert a node in a slice of sorted nodes and increments the node
-value based on the number of nodes that are smaller that itself.
+//Next returns the next node in a NodeIterator
+func (ni *NodeIterator) Next() (int, error) {
+	if ni.Position >= ni.numNodes {
+		return 0, errors.New("Number of nodes exceeded")
+	}
+
+	//The value has been precalculated
+	if ni.Position < len(ni.nodes) {
+		ni.Position++
+		return ni.nodes[ni.Position], nil
+	}
+
+	node := ni.current % (ni.numNodes - ni.Position)
+	ni.sortedNodes, node = sortedInsert(ni.sortedNodes, node)
+	ni.current /= (ni.numNodes - ni.Position)
+	ni.Position++
+
+	ni.nodes = append(ni.nodes, node)
+	return node, nil
+}
+
+/*sortedInsert insert a node in a slice of sorted nodes and increments the node
+node based on the number of nodes that are smaller that itself.
 */
-func SortedInsert(sortedNodes []int, node int) ([]int, int) {
+func sortedInsert(sortedNodes []int, node int) ([]int, int) {
 	for i, sortedNode := range sortedNodes {
 		if node >= sortedNode {
 			node++
