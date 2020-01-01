@@ -12,20 +12,20 @@ computed when necessary.
 */
 type NodeIterator struct {
 	Identifier int
-	Position int
+	Position   int
 
-	current int
-	numNodes int
+	current     int
+	numNodes    int
 	sortedNodes []int
-	nodes []int
+	nodes       []int
 }
 
 //NewNodeIterator creates a new node iterator
 func NewNodeIterator(identifier, numNodes int) *NodeIterator {
 	return &NodeIterator{
 		Identifier: identifier,
-		
-		current: identifier,
+
+		current:  identifier,
 		numNodes: numNodes,
 	}
 }

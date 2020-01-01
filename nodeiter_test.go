@@ -4,11 +4,59 @@ import (
 	"testing"
 )
 
+func benchmarkNodeIteratorGet(identifier, numNodes, pos int, b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ni := NewNodeIterator(identifier, numNodes)
+		ni.Get(pos)
+	}
+}
+
+func benchmarkNodeIteratorNext(identifier, numNodes, pos int, b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ni := NewNodeIterator(identifier, numNodes)
+		for j := 0; j < pos; j++ {
+			ni.Next()
+		}
+	}
+}
+
+func BenchmarkNodeIteratorGet7_3(b *testing.B) {
+	benchmarkNodeIteratorGet(137, 7, 3, b)
+}
+
+func BenchmarkNodeIteratorGet12_5(b *testing.B) {
+	benchmarkNodeIteratorGet(36677, 12, 5, b)
+}
+
+func BenchmarkNodeIteratorGet20_3(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 20, 3, b)
+}
+
+func BenchmarkNodeIteratorGet20_15(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 20, 15, b)
+}
+
+func BenchmarkNodeIteratorNext7_3(b *testing.B) {
+	benchmarkNodeIteratorNext(137, 7, 3, b)
+}
+
+func BenchmarkNodeIteratorNext12_5(b *testing.B) {
+	benchmarkNodeIteratorNext(36677, 12, 5, b)
+}
+
+func BenchmarkNodeIteratorNext20_3(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 20, 3, b)
+}
+
+func BenchmarkNodeIteratorNext20_15(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 20, 15, b)
+}
+
 func TestNodeIterator(t *testing.T) {
 	testCases := []struct {
 		Identifier int
-		NumNodes int
-		Expected []int
+		NumNodes   int
+		Expected   []int
 	}{
 		{137, 7, []int{4, 1, 5}},
 		{36677, 12, []int{5, 10, 8, 0, 4}},
@@ -40,7 +88,7 @@ func TestNodeIterator(t *testing.T) {
 		}
 
 		ni = NewNodeIterator(tc.Identifier, tc.NumNodes)
-		for i := len(tc.Expected)-1; i >= 0; i-- {
+		for i := len(tc.Expected) - 1; i >= 0; i-- {
 			val, _ := ni.Get(i)
 			if val != tc.Expected[i] {
 				t.Errorf("ni.Get(%d) == %d in reverse; want %d", i, val, tc.Expected[i])
