@@ -2,6 +2,7 @@ package sharded
 
 import (
 	"errors"
+	"sort"
 )
 
 /*NodeIterator represents a structure that can be used to iterate over a list
@@ -73,12 +74,8 @@ func (ni *NodeIterator) Next() (int, error) {
 node based on the number of nodes that are smaller that itself.
 */
 func sortedInsert(sortedNodes []int, node int) ([]int, int) {
-	for i, sortedNode := range sortedNodes {
-		if node >= sortedNode {
-			node++
-		} else {
-			return append(sortedNodes[:i], append([]int{node}, sortedNodes[i:]...)...), node
-		}
-	}
-	return append(sortedNodes, node), node
+	pos := sort.Search(len(sortedNodes), func(i int) bool {
+		return sortedNodes[i] > node+i
+	})
+	return append(sortedNodes[:pos], append([]int{node + pos}, sortedNodes[pos:]...)...), node + pos
 }

@@ -67,6 +67,17 @@ func BenchmarkNodeIteratorNext12_9(b *testing.B) {
 	benchmarkNodeIteratorNext(24146286748990567, 12, 9, b)
 }
 
+func BenchmarkSortedInsert(b *testing.B) {
+	var sortedNodes []int
+	for i := 0; i <= 65536; i++ {
+		sortedNodes = append(sortedNodes, i)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		sortedInsert(sortedNodes, 3)
+	}
+}
+
 func TestNodeIterator(t *testing.T) {
 	testCases := []struct {
 		Identifier int
