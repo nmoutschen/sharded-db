@@ -19,37 +19,52 @@ func benchmarkNodeIteratorNext(identifier, numNodes, pos int, b *testing.B) {
 		}
 	}
 }
-
-func BenchmarkNodeIteratorGet7_3(b *testing.B) {
-	benchmarkNodeIteratorGet(137, 7, 3, b)
+func BenchmarkNodeIteratorGet12_0(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 12, 0, b)
 }
 
-func BenchmarkNodeIteratorGet12_5(b *testing.B) {
-	benchmarkNodeIteratorGet(36677, 12, 5, b)
+func BenchmarkNodeIteratorGet12_1(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 12, 1, b)
 }
 
-func BenchmarkNodeIteratorGet20_3(b *testing.B) {
-	benchmarkNodeIteratorGet(24146286748990567, 20, 3, b)
+func BenchmarkNodeIteratorGet12_2(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 12, 2, b)
 }
 
-func BenchmarkNodeIteratorGet20_15(b *testing.B) {
-	benchmarkNodeIteratorGet(24146286748990567, 20, 15, b)
+func BenchmarkNodeIteratorGet12_3(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 12, 3, b)
 }
 
-func BenchmarkNodeIteratorNext7_3(b *testing.B) {
-	benchmarkNodeIteratorNext(137, 7, 3, b)
+func BenchmarkNodeIteratorGet12_6(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 12, 6, b)
 }
 
-func BenchmarkNodeIteratorNext12_5(b *testing.B) {
-	benchmarkNodeIteratorNext(36677, 12, 5, b)
+func BenchmarkNodeIteratorGet12_9(b *testing.B) {
+	benchmarkNodeIteratorGet(24146286748990567, 12, 9, b)
 }
 
-func BenchmarkNodeIteratorNext20_3(b *testing.B) {
-	benchmarkNodeIteratorNext(24146286748990567, 20, 3, b)
+func BenchmarkNodeIteratorNext12_0(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 12, 0, b)
 }
 
-func BenchmarkNodeIteratorNext20_15(b *testing.B) {
-	benchmarkNodeIteratorNext(24146286748990567, 20, 15, b)
+func BenchmarkNodeIteratorNext12_1(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 12, 1, b)
+}
+
+func BenchmarkNodeIteratorNext12_2(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 12, 2, b)
+}
+
+func BenchmarkNodeIteratorNext12_3(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 12, 3, b)
+}
+
+func BenchmarkNodeIteratorNext12_6(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 12, 6, b)
+}
+
+func BenchmarkNodeIteratorNext12_9(b *testing.B) {
+	benchmarkNodeIteratorNext(24146286748990567, 12, 9, b)
 }
 
 func TestNodeIterator(t *testing.T) {
